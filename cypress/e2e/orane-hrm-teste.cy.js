@@ -1,15 +1,16 @@
 import userData from '../fixtures/userData.json'
+import LoginPage from '../pages/loginPage.js'
+import DashboardPage from '../pages/dashboardPage.js'
+import MenuPage from '../pages/menuPage.js'
+
+const loginPage = new LoginPage()
+const dashboardPage = new DashboardPage()
+const menuPage = new MenuPage()
 
 describe('Orangge HRM Tests', () => {
 
   const selectorList  = {
-    usernameField: "[name='username']",
-    passwordField: "[name='password']",
-    loginButton: "[type='submit']",
-    sectionTitleTopBar: ".oxd-topbar-header-breadcrumb-module",
-    dashboarGrid: ".orangehrm-dashboard-grid",
-    wrongCredentialAlert: "[role='alert']",
-    myInfoButton:"[href='/web/index.php/pim/viewMyDetails']",
+
     firstNameField: "[name='firstName']",
     middleNameField: "[name='middleName']",
     lastNameField: "[name='lastName']",
@@ -17,13 +18,11 @@ describe('Orangge HRM Tests', () => {
   }
 
   it.only('User Info Update - Success', () => {
-    cy.visit('/auth/login')
-    cy.get(selectorList.usernameField).type(userData.userSuccess.username)
-    cy.get(selectorList.passwordField).type(userData.userSuccess.password)
-    cy.get(selectorList.loginButton).click()
-    cy.location('pathname').should('equal', '/web/index.php/dashboard/index')
-    cy.get(selectorList.dashboarGrid)
-    cy.get(selectorList.myInfoButton).click()
+    loginPage.accessLoginPage()
+    loginPage.loginWithUser(userData.userSuccess.username, userData.userSuccess.password)
+    dashboardPage.checkDashboardPage()
+    menuPage.accessMyInfo()
+    
     cy.get(selectorList.firstNameField).clear().type('NomeTeste')
     cy.get(selectorList.middleNameField).clear()
     cy.get(selectorList.lastNameField).clear().type('Silva')
@@ -37,8 +36,8 @@ describe('Orangge HRM Tests', () => {
     cy.get(':nth-child(2) > .oxd-input-group > :nth-child(2) > .oxd-select-wrapper > .oxd-select-text > .oxd-select-text--after > .oxd-icon').click() // Marital Status
     cy.get(':nth-child(3) > span').click() // Married
     cy.get(selectorList.submitButton).eq(0).click() // Save button
-    cy.get('body').should('contain', 'Successfully Updated')
-    cy.get('.oxd-toast-close').click()
+    cy.get('body').should('contain', 'Successfully Updated') // Success message
+    cy.get('.oxd-toast-close').click() // Close Button Success message*/
 
 
 
