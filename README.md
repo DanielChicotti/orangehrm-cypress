@@ -1,1 +1,1 @@
-# My Cypress Automation
+# Cypress Web Automation
